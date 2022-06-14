@@ -85,6 +85,11 @@ function applyMiddlewareToField<TSource, TContext, TArgs>(
         middleware.resolve,
       ),
     }
+  } else if (isMiddlewareResolver(middleware) && parsedField.subscribe) {
+    return {
+      ...parsedField,
+      subscribe: wrapResolverInMiddleware(parsedField.subscribe, middleware),
+    }
   } else if (
     isMiddlewareResolver(middleware) &&
     parsedField.resolve &&
@@ -93,11 +98,6 @@ function applyMiddlewareToField<TSource, TContext, TArgs>(
     return {
       ...parsedField,
       resolve: wrapResolverInMiddleware(parsedField.resolve, middleware),
-    }
-  } else if (isMiddlewareResolver(middleware) && parsedField.subscribe) {
-    return {
-      ...parsedField,
-      subscribe: wrapResolverInMiddleware(parsedField.subscribe, middleware),
     }
   } else if (
     isMiddlewareWithFragment(middleware) &&
