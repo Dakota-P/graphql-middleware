@@ -21,19 +21,19 @@ function parseField(field) {
 }
 function applyMiddlewareToField(field, options, middleware) {
   const parsedField = parseField(field);
-  if (utils.isMiddlewareWithFragment(middleware) && parsedField.resolve && parsedField.resolve !== graphql.defaultFieldResolver) {
-    return {
-      ...parsedField,
-      fragment: middleware.fragment,
-      fragments: middleware.fragments,
-      resolve: wrapResolverInMiddleware(parsedField.resolve, middleware.resolve)
-    };
-  } else if (utils.isMiddlewareWithFragment(middleware) && parsedField.subscribe) {
+  if (utils.isMiddlewareWithFragment(middleware) && parsedField.subscribe) {
     return {
       ...parsedField,
       fragment: middleware.fragment,
       fragments: middleware.fragments,
       subscribe: wrapResolverInMiddleware(parsedField.subscribe, middleware.resolve)
+    };
+  } else if (utils.isMiddlewareWithFragment(middleware) && parsedField.resolve && parsedField.resolve !== graphql.defaultFieldResolver) {
+    return {
+      ...parsedField,
+      fragment: middleware.fragment,
+      fragments: middleware.fragments,
+      resolve: wrapResolverInMiddleware(parsedField.resolve, middleware.resolve)
     };
   } else if (utils.isMiddlewareResolver(middleware) && parsedField.subscribe) {
     return {

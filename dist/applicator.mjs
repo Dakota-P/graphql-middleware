@@ -17,19 +17,19 @@ function parseField(field) {
 }
 function applyMiddlewareToField(field, options, middleware) {
   const parsedField = parseField(field);
-  if (isMiddlewareWithFragment(middleware) && parsedField.resolve && parsedField.resolve !== defaultFieldResolver) {
-    return {
-      ...parsedField,
-      fragment: middleware.fragment,
-      fragments: middleware.fragments,
-      resolve: wrapResolverInMiddleware(parsedField.resolve, middleware.resolve)
-    };
-  } else if (isMiddlewareWithFragment(middleware) && parsedField.subscribe) {
+  if (isMiddlewareWithFragment(middleware) && parsedField.subscribe) {
     return {
       ...parsedField,
       fragment: middleware.fragment,
       fragments: middleware.fragments,
       subscribe: wrapResolverInMiddleware(parsedField.subscribe, middleware.resolve)
+    };
+  } else if (isMiddlewareWithFragment(middleware) && parsedField.resolve && parsedField.resolve !== defaultFieldResolver) {
+    return {
+      ...parsedField,
+      fragment: middleware.fragment,
+      fragments: middleware.fragments,
+      resolve: wrapResolverInMiddleware(parsedField.resolve, middleware.resolve)
     };
   } else if (isMiddlewareResolver(middleware) && parsedField.subscribe) {
     return {
